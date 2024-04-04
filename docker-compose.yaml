@@ -1,22 +1,37 @@
-version: '3.8'
+version: "3.8"  # Adjust if necessary based on your Docker version
  
 services:
+
   jenkins:
-    image: jenkins:latest
-    container_name: jenkins
-    restart: unless-stopped
+
+    image: jenkins/jenkins:lts  # Use LTS version for stability
+
     ports:
-      - "8080:8080"
+
+      - "8080:8080"  # Map container port 8080 to host port 8080 for Jenkins web interface
+
     volumes:
-      - jenkins-data:/var/jenkins_home
-  sonarcube:
-    image: sonarqube:latest
-    container_name: sonarqube
-    restart: unless-stopped
-    ports:
-      - "9000:9000"
+
+      - jenkins-data:/var/jenkins_home  # Persist Jenkins data
+
     environment:
-      SONARQUBE_DATABASE_URL: jdbc:postgresql://postgres:5432/sonar
+
+      - DISALLOW_ANONYMOUS_LOGIN=yes  # Optional: Disable anonymous login for security
+ 
+  sonarqube:
+
+    image: sonarqube:latest  # Use latest version for testing purposes (consider LTS for production)
+
+    ports:
+
+      - "9000:9000"  # Map container port 9000 to host port 9000 for SonarQube web interface
+
+    volumes:
+
+      - sonarqube-data:/var/sonarqube/data  # Persist SonarQube data
  
 volumes:
-  jenkins-data:
+
+  jenkins-data:  # Named volume for Jenkins data persistence
+
+  sonarqube-data:  # Named volume for SonarQube data persistence
