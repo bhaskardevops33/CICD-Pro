@@ -1,43 +1,22 @@
-version: '3.7'
+version: '3.8'
  
 services:
-
   jenkins:
-
-    image: jenkins/jenkins:lts
-
+    image: jenkins:latest
     container_name: jenkins
-
-    restart: always
-
+    restart: unless-stopped
     ports:
-
       - "8080:8080"
-
     volumes:
-
-      - "./jenkins_home:/var/jenkins_home"
-
-    networks:
-
-      - jenkins-net
- 
-  sonarqube:
-
+      - jenkins-data:/var/jenkins_home
+  sonarcube:
     image: sonarqube:latest
-
     container_name: sonarqube
-
-    restart: always
-
+    restart: unless-stopped
     ports:
-
       - "9000:9000"
-
-    networks:
-
-      - jenkins-net
+    environment:
+      SONARQUBE_DATABASE_URL: jdbc:postgresql://postgres:5432/sonar
  
-networks:
-
-  jenkins-net:
+volumes:
+  jenkins-data:
